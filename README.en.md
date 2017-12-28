@@ -14,7 +14,8 @@ With this sample app, you can:
 
 Agora Video SDK supports iOS / Android / Web. You can find demos of these platform here:
 
-- Waiting...
+- IOS : https://github.com/AgoraIO/OpenDuo-iOS-Objective-C
+- Web : https://github.com/AgoraIO/OpenDuo-Web
 
 ## Running the App
 First, create a developer account at [Agora.io](https://dashboard.agora.io/signin/), and obtain an App ID.

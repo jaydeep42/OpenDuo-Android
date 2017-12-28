@@ -14,7 +14,8 @@
 
 Agora 视频 SDK 支持 iOS / Android / Web 等多个平台，你可以查看对应各平台的示例项目：
 
-- 开源后添加
+- IOS : https://github.com/AgoraIO/OpenDuo-iOS-Objective-C
+- Web : https://github.com/AgoraIO/OpenDuo-Web
 
 ## 运行示例程序
 首先在 [Agora.io 注册](https://dashboard.agora.io/cn/signup/) 注册账号，并创建自己的测试项目，获取到 AppID。
