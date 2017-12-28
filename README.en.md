@@ -19,12 +19,11 @@ Agora Video SDK supports iOS / Android / Web. You can find demos of these platfo
 
 ## Running the App
 First, create a developer account at [Agora.io](https://dashboard.agora.io/signin/), and obtain an App ID.
-Then select the editor in the test project, click App Certificate, and get the App Certificate according to the operation.
-Update "app/src/main/res/values/strings.xml" with your App ID and App Certificate.
+Update "app/src/main/res/values/strings.xml" with your App ID .
 
 ```
 <string name="agora_app_id"><#YOUR APP ID#></string>
-<string name="agora_app_certificate"><#YOUR APP Certificate#></string>
+
 ```
 
 ## Integration mode

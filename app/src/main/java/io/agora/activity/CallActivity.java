@@ -17,7 +17,6 @@ import android.widget.*;
 import io.agora.AgoraAPI;
 import io.agora.AgoraAPIOnlySignal;
 import io.agora.IAgoraAPI;
-import io.agora.media.DynamicKeyUtil;
 import io.agora.openduo.AGApplication;
 import io.agora.openduo.R;
 import io.agora.rtc.Constants;
@@ -481,8 +480,8 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
 
     // Tutorial Step 4
     private void joinChannel() {
-        String dynamickey = DynamicKeyUtil.getChannelKey(this,channelName ,0);
-        int ret = mRtcEngine.joinChannel(dynamickey, channelName, "Extra Optional Data", 0); // if you do not specify the uid, we will generate the uid for you
+
+        int ret = mRtcEngine.joinChannel(null, channelName, "Extra Optional Data", 0); // if you do not specify the uid, we will generate the uid for you
         Log.i(TAG, "joinChannel enter ret :" + ret);
 
 

@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText textAccountName;
     private String appId;
-    private String appCertificate;
     private int uid;
     private String account;
 
@@ -38,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         appId = getString(R.string.agora_app_id);
-        appCertificate = getString(R.string.agora_app_certificate);
 
         textAccountName = (EditText) findViewById(R.id.account_name);
         textAccountName.addTextChangedListener(new TextWatcher() {
@@ -64,10 +62,8 @@ public class MainActivity extends AppCompatActivity {
     public void onClickLogin(View v){
         Log.i(TAG ,"onClickLogin");
         account = textAccountName.getText().toString().trim();
-        long expiredTime = System.currentTimeMillis() / 1000 + 3600;
-        String token = TokenUtils.calcToken(appId ,appCertificate, account, expiredTime);
-        Log.i(TAG ,"onClickLogin token :" + token);
-        AGApplication.the().getmAgoraAPI().login2(appId, account, token, 0, "" ,5,1);
+
+        AGApplication.the().getmAgoraAPI().login2(appId, account, "_no_need_token", 0, "" ,5,1);
     }
 
     private void addCallback() {
@@ -115,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
+
     }
 
     @Override
