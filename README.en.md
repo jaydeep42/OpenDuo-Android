@@ -27,17 +27,9 @@ Update "app/src/main/res/values/strings.xml" with your App ID .
 ```
 
 ## Integration mode
-- The first step is to download the media SDK and signaling SDK in Agora.io SDK. After decompressing, copy the *.jar under the LIBS folder to the app/libs of this project. The arm64-v8a/x86/armeabi-v7a under the LIBS folder is copied to the app/src/main/libs of this project.
+- The first step is to download the media SDK and signaling SDK in Agora.io SDK. After decompressing, copy the *.jar under the LIBS folder to the app/libs of this project. The arm64-v8a/x86/armeabi-v7a under the LIBS folder is copied to the app/src/main/jniLibs of this project.
 
-- The second step: add the following code in the Android property of the "app/build.gradle" file in this project (the example is added in this code):
-
- sourceSets {
-        main {
-            jniLibs.srcDirs = ['src/main/libs']
-        }
-    }
-
-- The third step: add the following dependency in the "app/build.gradle" file dependency property of this project (the example is added in this code):
+- The second step: add the following dependency in the "app/build.gradle" file dependency property of this project (the example is added in this code):
 
   compile fileTree(dir: 'libs', include: ['*.jar'])
 
