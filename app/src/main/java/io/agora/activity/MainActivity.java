@@ -15,7 +15,6 @@ import io.agora.IAgoraAPI;
 import io.agora.openduo.AGApplication;
 import io.agora.openduo.R;
 import io.agora.rtc.RtcEngine;
-import io.agora.utils.TokenUtils;
 
 /**
  * @author yangting
