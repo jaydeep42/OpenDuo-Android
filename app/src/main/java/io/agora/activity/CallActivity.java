@@ -14,6 +14,8 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.*;
 
+import java.util.Locale;
+
 import io.agora.AgoraAPI;
 import io.agora.AgoraAPIOnlySignal;
 import io.agora.IAgoraAPI;
@@ -28,8 +30,8 @@ import io.agora.utils.Constant;
  * Created by beryl on 2017/11/6.
  */
 
-public class CallActivity extends AppCompatActivity implements AGApplication.OnAgoraEngineInterface{
-    private  final String TAG = CallActivity.class.getSimpleName();
+public class CallActivity extends AppCompatActivity implements AGApplication.OnAgoraEngineInterface {
+    private final String TAG = CallActivity.class.getSimpleName();
 
     private static final int PERMISSION_REQ_ID_RECORD_AUDIO = 22;
     private static final int PERMISSION_REQ_ID_CAMERA = PERMISSION_REQ_ID_RECORD_AUDIO + 1;
@@ -38,14 +40,12 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
     private AgoraAPIOnlySignal mAgoraAPI;
     private RtcEngine mRtcEngine;
 
-//    private String accountLocal ;
-    private String mBeCallaccount ;
+    private String mSubscriber;
 
     private CheckBox mCheckMute;
     private TextView mCallTitle;
     private ImageView mCallHangupBtn;
     private RelativeLayout mLayoutCallIn;
-
 
     private FrameLayout mLayoutBigView;
     private FrameLayout mLayoutSmallView;
@@ -67,11 +67,8 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
                 && checkSelfPermission(Manifest.permission.CAMERA, PERMISSION_REQ_ID_CAMERA)
                 && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, PERMISSION_REQ_ID_STORAGE)) {
             initAgoraEngineAndJoinChannel();
-
         }
-
     }
-
 
     private void InitUI() {
         mCallTitle = (TextView) findViewById(R.id.meet_title);
@@ -84,71 +81,60 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
 
         mLayoutBigView = (FrameLayout) findViewById(R.id.remote_video_view_container);
         mLayoutSmallView = (FrameLayout) findViewById(R.id.local_video_view_container);
-
     }
 
-
     private void setupData() {
-
         Intent intent = getIntent();
 
-//        accountLocal = intent.getStringExtra("account");
-        mBeCallaccount = intent.getStringExtra("mBeCallaccount");
+        mSubscriber = intent.getStringExtra("subscriber");
         channelName = intent.getStringExtra("channelName");
-        callType = intent.getIntExtra("type" ,-1);
-        if (callType == Constant.CALL_IN){
+        callType = intent.getIntExtra("type", -1);
+        if (callType == Constant.CALL_IN) {
             mIsCallInRefuse = true;
             mLayoutCallIn.setVisibility(View.VISIBLE);
             mCallHangupBtn.setVisibility(View.GONE);
-            mCallTitle.setText(mBeCallaccount + " is calling...");
+            mCallTitle.setText(String.format(Locale.US, "%s is calling...", mSubscriber));
 
-
-            try{
-                mPlayer = MediaPlayer.create(this ,R.raw.basic_ring);
+            try {
+                mPlayer = MediaPlayer.create(this, R.raw.basic_ring);
                 mPlayer.setLooping(true);
                 mPlayer.start();
-            }catch(Exception e){
-                e.printStackTrace();//输出异常信息
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            setupLocalVideo();           // Tutorial Step 3
-
-
-        }else if (callType == Constant.CALL_OUT){
+            setupLocalVideo(); // Tutorial Step 3
+        } else if (callType == Constant.CALL_OUT) {
             mLayoutCallIn.setVisibility(View.GONE);
             mCallHangupBtn.setVisibility(View.VISIBLE);
-            mCallTitle.setText(mBeCallaccount + " is be called...");
+            mCallTitle.setText(String.format(Locale.US, "%s is be called...", mSubscriber));
 
-
-            try{
-                mPlayer = MediaPlayer.create(this ,R.raw.basic_tones);
+            try {
+                mPlayer = MediaPlayer.create(this, R.raw.basic_tones);
                 mPlayer.setLooping(true);
                 mPlayer.start();
-            }catch(Exception e){
-                e.printStackTrace();//
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-            setupLocalVideo();           // Tutorial Step 3
-            joinChannel();               // Tutorial Step 4
+            setupLocalVideo(); // Tutorial Step 3
+            joinChannel(); // Tutorial Step 4
         }
-
-
-
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.i(TAG ,"onNewIntent");
+        Log.i(TAG, "onNewIntent");
         setupData();
     }
 
     @Override
     public void onFirstRemoteVideoDecoded(final int uid, int width, int height, int elapsed) { // Tutorial Step 5
-        Log.i(TAG ,"onFirstRemoteVideoDecoded  uid:" + uid);
+        Log.i(TAG, "onFirstRemoteVideoDecoded  uid:" + uid);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (mRemoteUid != 0){
+                if (mRemoteUid != 0) {
                     return;
                 }
                 mRemoteUid = uid;
@@ -176,6 +162,7 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
             }
         });
     }
+
     private CompoundButton.OnCheckedChangeListener oncheckChangeListerener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -183,9 +170,8 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
         }
     };
 
-    public void CallClickInit(View v){
-        switch (v.getId()){
-
+    public void CallClickInit(View v) {
+        switch (v.getId()) {
 
             case R.id.call_in_hangup:
                 callInRefuse();
@@ -193,69 +179,65 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
 
             case R.id.call_in_pickup:
                 mIsCallInRefuse = false;
-                joinChannel();               // Tutorial Step 4
-                mAgoraAPI.channelInviteAccept(channelName, mBeCallaccount, 0);
+                joinChannel(); // Tutorial Step 4
+                mAgoraAPI.channelInviteAccept(channelName, mSubscriber, 0, null);
                 mLayoutCallIn.setVisibility(View.GONE);
                 mCallHangupBtn.setVisibility(View.VISIBLE);
                 mCallTitle.setVisibility(View.GONE);
-                if (mPlayer != null && mPlayer.isPlaying()){
+                if (mPlayer != null && mPlayer.isPlaying()) {
                     mPlayer.stop();
                 }
                 break;
 
-            case R.id.call_button_hangup: //call out cancle or calling end
+            case R.id.call_button_hangup: // call out canceled or call ended
 
                 callOutHangup();
                 break;
         }
     }
 
-    private void callOutHangup(){
+    private void callOutHangup() {
         if (mAgoraAPI != null)
-            mAgoraAPI.channelInviteEnd(channelName ,mBeCallaccount,0);
+            mAgoraAPI.channelInviteEnd(channelName, mSubscriber, 0);
     }
-    private void callInRefuse(){
+
+    private void callInRefuse() {
         // "status": 0 // Default
         // "status": 1 // Busy
         if (mAgoraAPI != null)
-            mAgoraAPI.channelInviteRefuse(channelName, mBeCallaccount, 0, "{\"status\":0}");
+            mAgoraAPI.channelInviteRefuse(channelName, mSubscriber, 0, "{\"status\":0}");
 
         onEncCallClicked();
     }
 
     @Override
     public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
-        Log.i(TAG ,"onJoinChannelSuccess channel:" + channel+ " uid:" + uid);
+        Log.i(TAG, "onJoinChannelSuccess channel: " + channel + " uid: " + uid);
     }
 
-
-    /**
-     * siginal callback
-     */
-    private void addCallback() {
-        if (mAgoraAPI == null){
+    private void addSignalingCallback() {
+        if (mAgoraAPI == null) {
             return;
         }
 
         mAgoraAPI.callbackSet(new AgoraAPI.CallBack() {
 
-
             @Override
             public void onLogout(final int i) {
-                Log.i(TAG ,"onLogout  i = " + i);
+                Log.i(TAG, "onLogout  i = " + i);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (i == IAgoraAPI.ECODE_LOGOUT_E_KICKED){ //other login the account
-                            Toast.makeText(CallActivity.this ,"Other login account ,you are logout." ,Toast.LENGTH_SHORT).show();
+                        if (i == IAgoraAPI.ECODE_LOGOUT_E_KICKED) { // other login the account
+                            Toast.makeText(CallActivity.this, "Other login account ,you are logout.", Toast.LENGTH_SHORT).show();
 
-                        }else if (i == IAgoraAPI.ECODE_LOGOUT_E_NET){ //net
-                            Toast.makeText(CallActivity.this ,"Logout for Network can not be." ,Toast.LENGTH_SHORT).show();
+                        } else if (i == IAgoraAPI.ECODE_LOGOUT_E_NET) { // net
+                            Toast.makeText(CallActivity.this, "Logout for Network can not be.", Toast.LENGTH_SHORT).show();
                             finish();
                         }
                         Intent intent = new Intent();
-                        intent.putExtra("result" ,"finish");
-                        setResult(RESULT_OK,intent);
+                        intent.putExtra("result", "finish");
+                        setResult(RESULT_OK, intent);
                         finish();
                     }
                 });
@@ -267,14 +249,14 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
              */
             @Override
             public void onInviteReceived(final String channelID, final String account, final int uid, String s2) {
-                Log.i(TAG ,"onInviteReceived  channelID = " + channelID + "  account = " + account);
+                Log.i(TAG, "onInviteReceived  channelID = " + channelID + "  account = " + account);
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        "status": 0 // Default
-//                        "status": 1 // Busy
-                        mAgoraAPI.channelInviteRefuse(channelID ,account,uid,"{\"status\":1}");
+//                      "status": 0 // Default
+//                      "status": 1 // Busy
+                        mAgoraAPI.channelInviteRefuse(channelID, account, uid, "{\"status\":1}");
 
                     }
                 });
@@ -285,19 +267,16 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
              */
             @Override
             public void onInviteReceivedByPeer(final String channelID, String account, int uid) {
-                Log.i(TAG ,"onInviteReceivedByPeer  channelID = " + channelID + "  account = " + account);
+                Log.i(TAG, "onInviteReceivedByPeer  channelID = " + channelID + "  account = " + account);
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
                         mCallHangupBtn.setVisibility(View.VISIBLE);
 
-                        mCallTitle.setText(mBeCallaccount + " is being called ...");
-
+                        mCallTitle.setText(String.format(Locale.US, "%s is being called ...", mSubscriber));
                     }
                 });
-
             }
 
             /**
@@ -312,7 +291,7 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (mPlayer != null && mPlayer.isPlaying()){
+                        if (mPlayer != null && mPlayer.isPlaying()) {
                             mPlayer.stop();
                         }
                         mCallTitle.setVisibility(View.GONE);
@@ -331,21 +310,20 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
 
             @Override
             public void onInviteRefusedByPeer(String channelID, final String account, int uid, final String s2) {
-                Log.i(TAG, "onInviteRefusedByPeer  channelID = " + channelID + "  account = " + account + " s2 = " + s2);
+                Log.i(TAG, "onInviteRefusedByPeer channelID = " + channelID + " account = " + account + " s2 = " + s2);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (mPlayer != null && mPlayer.isPlaying()){
+                        if (mPlayer != null && mPlayer.isPlaying()) {
                             mPlayer.stop();
                         }
-                        if (s2.contains("status") && s2.contains("1")){
-                            Toast.makeText(CallActivity.this ,account +" reject your call for busy" ,Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(CallActivity.this ,account +" reject your call" ,Toast.LENGTH_SHORT).show();
+                        if (s2.contains("status") && s2.contains("1")) {
+                            Toast.makeText(CallActivity.this, account + " reject your call for busy", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(CallActivity.this, account + " reject your call", Toast.LENGTH_SHORT).show();
                         }
 
                         onEncCallClicked();
-
                     }
                 });
             }
@@ -359,12 +337,12 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
              * @param s2
              */
             @Override
-            public void onInviteEndByPeer(final String channelID,String account,int uid, String s2) {
-                Log.i(TAG ,"onInviteEndByPeer  channelID = " + channelID + "  account = " + account);
+            public void onInviteEndByPeer(final String channelID, String account, int uid, String s2) {
+                Log.i(TAG, "onInviteEndByPeer channelID = " + channelID + " account = " + account);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (channelID.equals(channelName)){
+                        if (channelID.equals(channelName)) {
                             onEncCallClicked();
                         }
 
@@ -379,8 +357,8 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
              * @param uid
              */
             @Override
-            public void onInviteEndByMyself(String channelID,String account,int uid) {
-                Log.i(TAG ,"onInviteEndByMyself  channelID = " + channelID + "  account = " + account);
+            public void onInviteEndByMyself(String channelID, String account, int uid) {
+                Log.i(TAG, "onInviteEndByMyself channelID = " + channelID + "  account = " + account);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -390,8 +368,6 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
             }
         });
     }
-
-
 
     public final void showLongToast(final String msg) {
         this.runOnUiThread(new Runnable() {
@@ -405,15 +381,15 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
     @Override
     protected void onResume() {
         super.onResume();
-        addCallback();
+        addSignalingCallback();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        Log.i(TAG ,"onDestroy");
-        if (mPlayer != null && mPlayer.isPlaying()){
+        Log.i(TAG, "onDestroy");
+        if (mPlayer != null && mPlayer.isPlaying()) {
             mPlayer.stop();
         }
 
@@ -428,10 +404,10 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
 
     @Override
     public void onBackPressed() {
-        Log.i(TAG ,"onBackPressed callType:" + callType +" mIsCallInRefuse:" + mIsCallInRefuse);
-        if (callType == Constant.CALL_IN && mIsCallInRefuse){
+        Log.i(TAG, "onBackPressed callType: " + callType + " mIsCallInRefuse: " + mIsCallInRefuse);
+        if (callType == Constant.CALL_IN && mIsCallInRefuse) {
             callInRefuse();
-        }else {
+        } else {
             callOutHangup();
         }
         super.onBackPressed();
@@ -451,8 +427,8 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
     private void initializeAgoraEngine() {
         mAgoraAPI = AGApplication.the().getmAgoraAPI();
         mRtcEngine = AGApplication.the().getmRtcEngine();
-        Log.i(TAG ,"initializeAgoraEngine mRtcEngine :" +mRtcEngine);
-        if (mRtcEngine != null){
+        Log.i(TAG, "initializeAgoraEngine mRtcEngine :" + mRtcEngine);
+        if (mRtcEngine != null) {
             mRtcEngine.setLogFile("/sdcard/sdklog.txt");
         }
         setupVideoProfile();
@@ -471,26 +447,19 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
         mLayoutBigView.addView(surfaceView);
         mRtcEngine.setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, 0));
         mLayoutBigView.setVisibility(View.VISIBLE);
-        Log.i(TAG, "setupLocalVideo  startPreview enter >>");
-        Log.i(TAG ,"setupLocalVideo mRtcEngine :" +mRtcEngine);
         int ret = mRtcEngine.startPreview();
-        Log.i(TAG, "setupLocalVideo  startPreview enter << ret :" + ret);
-
+        Log.i(TAG, "setupLocalVideo startPreview enter << ret :" + ret);
     }
 
     // Tutorial Step 4
     private void joinChannel() {
-
         int ret = mRtcEngine.joinChannel(null, channelName, "Extra Optional Data", 0); // if you do not specify the uid, we will generate the uid for you
         Log.i(TAG, "joinChannel enter ret :" + ret);
-
-
     }
 
     // Tutorial Step 5
     private void setupRemoteVideo(int uid) {
-
-        Log.i(TAG ,"setupRemoteVideo  uid:" + uid +" " + mLayoutBigView.getChildCount());
+        Log.i(TAG, "setupRemoteVideo uid: " + uid + " " + mLayoutBigView.getChildCount());
         if (mLayoutBigView.getChildCount() >= 1) {
             mLayoutBigView.removeAllViews();
         }
@@ -501,23 +470,18 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
         mRtcEngine.setupLocalVideo(new VideoCanvas(surfaceViewSmall, VideoCanvas.RENDER_MODE_HIDDEN, 0));
         mLayoutSmallView.setVisibility(View.VISIBLE);
 
-
-
         SurfaceView surfaceView = RtcEngine.CreateRendererView(getBaseContext());
         mLayoutBigView.addView(surfaceView);
         mRtcEngine.setupRemoteVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, uid));
         mLayoutBigView.setVisibility(View.VISIBLE);
-
-
     }
 
 
     // Tutorial Step 7
     private void onRemoteUserLeft(int uid) {
-        if (uid == mRemoteUid){
+        if (uid == mRemoteUid) {
             finish();
         }
-
     }
 
     // Tutorial Step 10
@@ -573,7 +537,7 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
                 }
                 break;
             }
-            case PERMISSION_REQ_ID_STORAGE:{
+            case PERMISSION_REQ_ID_STORAGE: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     initAgoraEngineAndJoinChannel();
@@ -585,7 +549,6 @@ public class CallActivity extends AppCompatActivity implements AGApplication.OnA
             }
         }
     }
-
 
     private void initAgoraEngineAndJoinChannel() {
         initializeAgoraEngine();
