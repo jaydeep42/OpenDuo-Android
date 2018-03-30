@@ -1,24 +1,24 @@
-# Agora Android OpenDuo
+# Open Duo for Android
 
 *其他语言版本： [简体中文](README.zh.md)*
 
-The Agora Android OpenDuo Sample App is an open-source demo that will help you get video chat integrated directly into your Android applications using the Agora Video SDK and the Agora Signal SDK.
+The Agora Android OpenDuo Sample App is an open-source demo that will help you get video chat integrated directly into your Android applications using the Agora Video SDK and the Agora Signaling SDK.
 
 With this sample app, you can:
 
-- Login signal server
-- Inquire whether the calling object is online
+- Login signaling server
+- Inquire whether the calling subscriber is online
 - Call each other, join the call, end the call
 - Mute / unmute audio
 - Switch camera
 
 Agora Video SDK supports iOS / Android / Web. You can find demos of these platform here:
 
-- IOS : https://github.com/AgoraIO/OpenDuo-iOS-Objective-C
-- Web : https://github.com/AgoraIO/OpenDuo-Web
+- [OpenDuo-iOS-Objective-C](https://github.com/AgoraIO/OpenDuo-iOS-Objective-C)
+- [OpenDuo-Web](https://github.com/AgoraIO/OpenDuo-Web)
 
 ## Running the App
-First, create a developer account at [Agora.io](https://dashboard.agora.io/signin/), and obtain an App ID.
+**First**, create a developer account at [Agora.io](https://dashboard.agora.io/signin/), and obtain an App ID.
 Update "app/src/main/res/values/strings.xml" with your App ID .
 
 ```
@@ -26,15 +26,17 @@ Update "app/src/main/res/values/strings.xml" with your App ID .
 
 ```
 
-## Integration mode
-- The first step is to download the media SDK and signaling SDK in Agora.io SDK. After decompressing, copy the *.jar under the LIBS folder to the app/libs of this project. The arm64-v8a/x86/armeabi-v7a under the LIBS folder is copied to the app/src/main/jniLibs of this project.
+`Currently this project is compatible with Agora Video SDK 2.1.0 and Agora Signaling SDK 1.2.1`
 
-- The second step: add the following dependency in the "app/build.gradle" file dependency property of this project (the example is added in this code):
+**Second**, download the video SDK and signaling SDK from [Agora.io SDK](https://www.agora.io/en/download/). Unzip the downloaded SDK package and copy ***.jar** under **libs** to **app/libs**, **arm64-v8a**/**x86**/**armeabi-v7a** under **libs** to **app/src/main/jniLibs**.
 
+Then, add the following code in the property of the dependence of the "app/build.gradle"(current sample is already with it):
+
+```
   compile fileTree(dir: 'libs', include: ['*.jar'])
+```
 
-
-Finally, open project with Android Studio, connect your Android device, build and run.
+**Finally**, open project with Android Studio, connect your Android device, build and run.
 
 Or use `Gradle` to build and run.
 
@@ -45,7 +47,7 @@ Or use `Gradle` to build and run.
 
 ## Connect Us
 - You can find full API document at [Document Center](https://docs.agora.io/en/)
-- You can file bugs about this demo at [issue](https://github.com/AgoraIO/Agora-Android-Tutorial-1to1/issues)
+- You can file bugs about this demo at [issue](https://github.com/OpenDuo-Android/issues)
 
 ## License
 The MIT License (MIT).

@@ -28,16 +28,15 @@ Agora 视频/信令 SDK 支持 iOS / Android / Web 等多个平台，你可以�
 
 `本项目代码当前适配了视频 SDK 2.1.1 版本以及信令 SDK 1.2.1 版本，如果使用不同版本的 SDK 可能会需要稍微调整代码里的调用代码`
 
-## 集成方式
-- 第1步: 在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载视频通话 SDK 和信令 SDK，解压后将其中的 **libs** 文件夹下的 ***.jar** 复制到本项目的 **app/libs** 下，其中的 **libs** 文件夹下的 **arm64-v8a**/**x86**/**armeabi-v7a** 复制到本项目的 **app/src/main/jniLibs** 下。
+**其次** 在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载视频通话 SDK 和信令 SDK，解压后将其中的 **libs** 文件夹下的 ***.jar** 复制到本项目的 **app/libs** 下，其中的 **libs** 文件夹下的 **arm64-v8a**/**x86**/**armeabi-v7a** 复制到本项目的 **app/src/main/jniLibs** 下。
 
-- 第2步: 在本项目的 "app/build.gradle" 文件依赖属性中添加如下依赖关系（此处代码中已添加示例）：
+在本项目的 "app/build.gradle" 文件依赖属性中添加如下依赖关系（此处代码中已添加示例）：
 
 ```
 compile fileTree(dir: 'libs', include: ['*.jar'])
 ```
 
-最后用 Android Studio 打开该项目，连上设备，编译并运行。
+**最后** 用 Android Studio 打开该项目，连上设备，编译并运行。
 
 也可以使用 `Gradle` 直接编译运行。
 
