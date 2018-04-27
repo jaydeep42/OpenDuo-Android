@@ -2,7 +2,7 @@
 
 *其他语言版本： [简体中文](README.zh.md)*
 
-The Agora OpenDuo Sample App supports the following platforms:
+The Agora OpenDuo sample app supports the following platforms:
 
 * [iOS](https://github.com/AgoraIO/OpenDuo-iOS-Objective-C)
 * [Android](https://github.com/AgoraIO/OpenDuo-Android)
@@ -12,7 +12,7 @@ This readme describes the steps and considerations for demonstrating the Agora O
 
 ## Introduction
 
-Built upon the Agora Video SDK and the Agora Signaling SDK, the Agora OpenDuo for Android is an open-source demo that integrates video chat into your Web applications.
+Built upon the Agora Video SDK and the Agora Signaling SDK, the Agora OpenDuo for Android is an open-source demo that integrates video chat into your Android applications.
 
 This sample app allows you to:
 
@@ -26,7 +26,7 @@ This sample app allows you to:
 ## Developer Environment Requirements
 
 - Android Studio 2.0 or later
-- Real devices, for example Nexus 5X
+- Real Android devices, for example Nexus 5X
 
 NOTE: Agora recommends using a real device instead of a simulator, because some simulators are inadequate and hence may cause issues. 
 
