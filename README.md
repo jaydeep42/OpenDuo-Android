@@ -21,26 +21,26 @@ This sample app allows you to:
 - Call each other
 - Accept or hang up a call
 - Mute/unmute a user
-- Switch camera
+- Switch the camera
 
 ## Developer Environment Requirements
 
 - Android Studio 2.0 or later
 - Real Android devices, for example Nexus 5X
 
-NOTE: Agora recommends using a real device instead of a simulator, because some simulators are inadequate and hence may cause issues. 
+NOTE: Agora recommends using a real device instead of an emulator. 
 
 ## Running the App
 1. Create a developer account at [Agora.io](https://dashboard.agora.io/signin/), and obtain an App ID. 
    
-   NOTE: For more information, see [Obtaining an App ID](https://docs.agora.io/en/2.2/addons/Signaling/Agora%20Basics/key_signaling?platform=All%20Platforms)
+   NOTE: For more information, see [Obtaining an App ID](https://docs.agora.io/en/2.2/addons/Signaling/Agora%20Basics/key_signaling?platform=All%20Platforms).
    
 2. Fill in your App ID in the **app/src/main/res/values/strings.xml**.
 
  
         <string name="agora_app_id"><#YOUR APP ID#></string>
 
-3. Download the Agora video SDK and the Agora signaling SDK from [Agora.io SDK](https://www.agora.io/en/download/). 
+3. Download the Agora Video SDK and the Agora Signaling SDK from [Agora.io SDK](https://www.agora.io/en/download/). 
 
    NOTE: This project is built upon the **Agora Video SDK 2.1.0** and the **Agora Signaling SDK 1.2.1**.
 
@@ -49,7 +49,7 @@ NOTE: Agora recommends using a real device instead of a simulator, because some 
   - copy ***.jar** under **/libs** to **app/libs**
   - copy **arm64-v8a**/**x86**/**armeabi-v7a** under **libs** to **app/src/main/jniLibs**.
 
-5. Check whether the following code snippet is in the property of the dependence of **app/build.gradle** (the current sample app already has it):
+5. Check whether the following code snippet is in the property of the dependency of **app/build.gradle** (included in the sample app):
 
           compile fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -59,8 +59,8 @@ NOTE: Agora recommends using a real device instead of a simulator, because some 
 
 ## Contact Us
 
-- You can find the full API document at the [Developer Center](https://docs.agora.io/en/)
-- You can file a ticket about this demo at [issue](https://github.com/AgoraIO/OpenDuo-iOS-Objective-C/issues)
+- You can find the API documentation at [Developer Center](https://docs.agora.io/en/).
+- You can report issues about this demo at [issue](https://github.com/AgoraIO/OpenDuo-iOS-Objective-C/issues).
 
 ## License
 
